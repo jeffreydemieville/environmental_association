@@ -19,6 +19,7 @@ from datetime import datetime, timedelta
 import re
 import subprocess as sp
 import shutil
+import math
 
 
 # --------------------------------------------------
@@ -612,7 +613,8 @@ def main():
                 result['canopy_temperature_depression'] = result['temperature'] - result['median']
     
                 # Calculate vapor pressure deficit.
-                result['vapor_pressure_deficit'] = get_vapor_pressure_deficit(result['temperature'], result['median'], result['relHumidity'])
+                # result['vapor_pressure_deficit'] = get_vapor_pressure_deficit(result['temperature'], result['median'], result['relHumidity'])
+                result['vapor_pressure_deficit'] = result.apply(lambda x: get_vapor_pressure_deficit(x['temperature'], x['median'], x['relHumidity']), axis=1)
 
             # Drop potentially erroneous column
             result = result.drop('brightness', axis=1)
